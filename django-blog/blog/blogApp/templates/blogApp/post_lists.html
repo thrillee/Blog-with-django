@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load markdown_deux_tags %}
+{% block title %}
+  {{title}}
+{% endblock title %}
+
+{% block content %}
+
+
+  <div class="container">
+<br>
+{% for post in posts %}
+<div class="row mb-1">
+  <div class="col-md-12">
+    <div class="card flex-md-row mb-4 box-shadow h-md-250">
+      <div class="card-body d-flex flex-column align-items-start">
+        <strong class="d-inline-block mb-2 text-primary">{{post.category}}</strong>
+        <h3 class="mb-0">
+          <a class="text-dark" href="{{ post.get_absolute_url }}">{{post.title}}</a>
+        </h3>
+        <div class="mb-1 text-muted">{{post.created_at|timesince}} ago</div>
+        <p class="card-text mb-auto content-markdown">{{ post.content|markdown|truncatewords:10}}</p>
+        <a href="{{ post.get_absolute_url }}">Continue reading</a>
+      </div>
+      {% if post.image %}
+      <span class="img-responsive">
+      <img class="card-img-right flex-auto d-none d-md-block" src="{{ post.image.url }}"/>
+      </span>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% empty %}
+<div class="row mb-2">
+  <div class="col-md-6">
+    <div class="card flex-md-row mb-4 box-shadow h-md-250">
+      <div class="card-body d-flex flex-column align-items-start">
+        <strong class="d-inline-block mb-2 text-primary">{{post.category}}</strong>
+        <h3 class="mb-0">
+          <a class="text-dark" href="{{ post.get_absolute_url }}">No Post</a>
+        </h3>
+        <div class="mb-1 text-muted">{{post.created_at|timesince}} ago</div>
+        <p class="card-text mb-auto">{{ post.content|truncatewords:25|linebreaks }}</p>
+        <a href="{{ post.get_absolute_url }}">Dryness</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+<nav class="blog-pagination">
+  {% if posts.has_previous %}
+    <a class="btn btn-outline-primary" href="?page={% if posts.number == 1 %}1 {% else %}{{ posts.previous_page_number }}{% endif %}{% if request.GET.get %}&q={{request.GET.get}}{% endif %}">Newer</a>
+  {% else %}
+  <a class="btn btn-outline-primary disabled" href="?page={% if posts.number == 1 %}1 {% else %}{{ posts.previous_page_number }}{% endif %}{% if request.GET.get %}&q={{request.GET.get}}{% endif %}">Newer</a>
+  {% endif %}
+  {% if posts.has_next %}
+  <a class="btn btn-outline-secondary " href="?page={{ posts.next_page_number }}{% if request.GET.get %}&q={{request.GET.get}}{% endif %}">Older</a>
+  {% endif %}
+</nav>
+
+{% endblock content %}

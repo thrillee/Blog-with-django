@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load markdown_deux_tags %}
+{% block head_extra %}
+  <form method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+      {{ form.media }}
+    </div>
+
+  </form>
+{% endblock %}
+
+{% block content %}
+  <form class="form-group" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+      {{form.as_p}}
+
+    <button type="submit" class="btn btn-secondary">Add Post</button>
+  </form>
+{% endblock %}

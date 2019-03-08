@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <p>{{user.username}} {% if user.image %}
+    <img src="{{ user.image.url }}" class="img-responsive">
+    {% endif %}</p>
+  <p>{{user.description}}</p>
+  <p>{{user.email}}</p>
+
+{% if request.user.is_authenticated and request.user.is_staff or request.user.is_superuser %}
+
+  {% if drafts != None %}
+  <h3>Drafts</h3>
+  {% for draft in drafts %}
+  <ul>
+    <li><a href="{% url 'blogApp:post_update' post=draft.slug %}"> {{ draft }} </a>
+      <a href="{% url 'blogApp:delete_post' post=draft.slug %}"><input type="button"  value="delete" class="btn btn-danger btn-sm"> </a>
+      <p>Created at {{draft.created_at}}</p>
+    </li>
+  </ul>
+    {% empty %}
+    <h4>No draft</h4>
+  {% endfor %}
+  {% endif %}
+{% endif %}
+
+{% endblock %}

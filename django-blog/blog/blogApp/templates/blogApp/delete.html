@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form class="container" method="POST">
+      {% csrf_token %}
+      <p>Are you sure you want to delete {{title}}</p>
+      <a href="{% url 'blogApp:post_details' post=slug %}">
+        <button type="button" class="btn btn-primary btn-sm">No</button>
+      </a>
+      <button type="submit" class="btn btn-danger btn-sm">Yes</button>
+    </form>
+{% endblock %}

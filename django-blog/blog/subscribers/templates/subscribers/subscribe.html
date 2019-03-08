@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <form class="form-group" method="POST">
+    {% csrf_token %}
+    <p class="form-group">{{form.as_p}}</p>
+    <button type="submit">Subscribe</button>
+  </form>
+{% endblock %}

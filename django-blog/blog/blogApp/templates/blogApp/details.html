@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load markdown_deux_tags %}
+{% block title %}
+  {{title}}
+{% endblock title %}
+
+{% block content %}
+  <main role="main" class="container">
+    <div class="row">
+      <div class="blog-main ">
+        <br>
+        <div class="blog-post">
+          <h2 class="blog-post-title">{{title}}</h2>
+          <p class="blog-post-meta">{{time.month}}/{{time.day}}/{{time.year}} by <a href="{% url 'profiles:user_profile' username=user %}">{{author}}</a></p>
+          {% if image %}
+          <img src="{{image.url}}" class="img-responsive">
+          <a href="{{image.url}}" download='thrill'>download</a>
+          {% endif %}
+          <p>{{ content|markdown }}</p>
+          <p>{% if author == request.user and user.is_authenticated and request.user.is_staff or request.user.is_superuser %}
+            <a class="text-muted" href="{% url 'blogApp:post_update' post=slug %}">
+              Edit
+            </a>
+            <a class="text-muted" href="{% url 'blogApp:delete_post' post=slug %}">
+              Delete
+            </a>
+            {% endif %}</p>
+          <p>
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}">
+              Facebook
+            </a>
+
+      <a href="https://twitter.com/home?status={{share_string}}%20{{ request.build_absolute_uri }}">
+      Twitter
+      </a>
+          </p>
+        </div>
+
+    <h3>Comments ({{no_of_comments}})</h3>
+    {% for comment in comments %}
+      <p>{{comment}} by {{comment.name}}</p>
+      <p>{{comment.created_at|timesince}}  ago</p>
+      <br>
+    {% empty %}
+      <p>No comments</p>
+    {% endfor %}
+  </main>
+      <h3>Add comment</h3>
+
+      <form  method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+          <table>
+            <p>{{form.as_table}}</p>
+          </table>
+          <br>
+          <button type="submit" class="btn btn-secondary">Add Comment</button>
+        </div>
+      </form>
+
+{% endblock content %}
